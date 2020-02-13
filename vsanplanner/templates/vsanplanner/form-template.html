@@ -1,0 +1,18 @@
+{% for field in form %}
+	<div class="form-group">
+		<div>
+			<span class="text-a "> {{ field.errors }}</span>	
+		</div>
+		{% if field.html_name == "RawCap" %}
+		{{ hidden }}
+		{% elif field.html_name == "SpbmCap" %}
+		{{ hidden }}
+		{% elif field.html_name == "OndiskOver" %}
+		{{ hidden }}
+		{% else %} 
+		<label> {{ field.label_tag }}</label> 
+		<div class="col-sm-6"> {{ field }}</div> 
+		{% endif %}
+	</div>
+{% endfor %}
+<!-- in order to hide rawcap & spbmcap i changed "field.is_hidden" to hidden -->  	

@@ -1,0 +1,59 @@
+<html>
+	<head>
+		<title>
+			VSAN Planner
+		</title>
+        <style type="text/css">
+				body{ color: #69f;
+				      font-size:medium;
+                                      text-align:center
+				}
+				p#start{ color: #ffab23;
+				         font-size: larger;
+                                        border-style: solid;
+                                        border-color: chartreuse;
+				}
+                p#explain{ color: #ffab23;
+			 font-size: large;
+                         border-style: solid;
+                         border-color: chartreuse
+                }
+                 p#example{ color: #ffab23;
+			 font-size: large;
+                         border-style: solid;
+                         border-color: chartreuse
+                }
+                a.button{
+                	font-size: 20;
+                	color:#69f;
+                }
+		</style>
+	</head>
+	<body>
+		{% block content %}
+		 <p id="start"><b>This program calculates required memory and provided capacity of your VSAN cluster </b></p><br>
+
+		  <b>Raw and Available Capacity </b> <br>
+            Note: On-disk format is version 2.0 or higher <br>
+            Note: There is an extra 6.2 percent overhead for Deduplication and compression with software checksum enabled<br>
+            <br>
+
+		 <p id="explain"> <b>Select which functionality of this app you want to use </b></p></br>
+
+		 {% if error_message %}
+		  <p><strong>{{ error_message }}</strong></p>
+		  {% endif %}
+
+         <form action ="" method="post" enctype="multipart/form-data">
+         	{% csrf_token %}
+         	{% include 'vsanplanner/form-template.html' %}
+         	<div class="form-group">
+         		<div class="col-sm-offset-2 col-sm-10">
+         			<button type="submit" class ="btn btn-success btn-lg"> Submit </button>
+         		</div>
+         	</div>
+          
+		{% endblock %}	
+	</body>
+		
+</html>

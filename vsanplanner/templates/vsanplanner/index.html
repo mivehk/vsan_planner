@@ -1,0 +1,86 @@
+<html>
+	<head>
+		<title>
+			VSAN Planner
+		</title>
+        <style type="text/css">
+				body{ color: #69f;
+				      font-size:medium;
+                                      text-align:center
+				}
+				p#start{ color: #ffab23;
+				         font-size: larger;
+                                        border-style: solid;
+                                        border-color: chartreuse;
+				}
+                p#explain{ color: #ffab23;
+			 font-size: large;
+                         border-style: solid;
+                         border-color: chartreuse
+                }
+                 p#example{ color: #ffab23;
+			 font-size: large;
+                         border-style: solid;
+                         border-color: chartreuse
+                }
+                h2.data{
+                	font-size: medium;
+                	color:#69f;
+                }
+                h1.result{
+                    font-size: x-large;
+                    color:#69f;
+                }
+		</style>
+	</head>
+	<body>
+		{% block content %}
+		 <p id="start"><b>This program calculates capacity of your VSAN cluster </b></p><br>
+
+		  <b>Raw and Available Capacity </b> <br>
+            Note: On-disk format is version 2.0 or higher <br>
+            Note: There is an extra 6.2 percent overhead for Deduplication and compression with software checksum enabled<br>
+            <br>
+
+		 <p id="explain"> <b>Select which functionality of this app you want to use </b></p></br>
+
+         {% if cluster_list %}
+         {% for cluster in cluster_list %}
+         <ul>
+         	<li>
+         		<h2 class='data'>Customer Name : {{ cluster.CustomerName }}</h2>
+         		<h2 class='data'>Number of DiskGroups : {{ cluster.NumDG }}</h2>
+         		<h2 class='data'>Number of capacity disks : {{ cluster.NumCapDisks }}</h2>
+         		<h2 class='data'>SSD size : {{ cluster.SSDSize }}</h2>
+         		<h2 class='data'>Number of nodes : {{ cluster.NumNodes }}</h2>
+         	    <h2 class='data'>Selected FTM level : {{ cluster.get_FTM_display }} </h2>
+                <!--<h2 class='data'>on-disk format capacity overhead : {{ cluster.OndiskOver }}</h2>
+         		<h2 class='data'>Cluster ID : {{ cluster.Clusterid }}</h2>-->
+         		<h1 class='result'>Raw capacity: {{ cluster.RawCapacity }}</h1>
+         		<h1 class='result'>Capacity after applying storage policy: {{ cluster.SpbmCapacity }}</h1> <br><br>
+         	  <form action="{% url 'vsanplanner:cluster-delete' cluster.Clusterid %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-default btn-sm"> Delete </button>
+                </form>
+                <form action="{% url 'vsanplanner:cluster-update' cluster.Clusterid %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-default btn-sm"> Update </button>
+                </form>       		
+         	</li>
+         </ul>
+        {% endfor %}
+        {% else %}
+        <h1 class='result'> No customer's cluster is entered yet</h1>
+
+        {% endif %}
+
+                <form action="{% url 'vsanplanner:cluster-entry' %}" method="post" style="display: inline;">
+         			{% csrf_token %}
+         			<button type="submit" class="btn btn-primary btn-lg"> Make a cluster entry </button>
+         		</form>	
+
+          
+		{% endblock %}	
+	</body>
+		
+</html>
